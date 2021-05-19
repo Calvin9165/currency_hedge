@@ -109,7 +109,7 @@ def create_index(start, end, index_ticker):
 
 
 # Function Inputs
-start = '1999-01-01'
+start = '1990-01-01'
 end = '2020-12-31'
 lookback_period = None
 watchlist_name = 'stock_and_bond_futures'

@@ -17,6 +17,20 @@ for column in stocks_bonds_pct:
 
 combined.fillna(0, inplace=True)
 
+# fun little things to play around with, i.e. leverage and stuff
+# combined['&ZN'] *= 10
+# combined['&SP'] *= 4
+#
+# # combined['USDRUB'] *= 3
+# combined.drop('USDRUB', axis=1, inplace=True)
+#
+# combined['USDZAR'] *= 3
+# combined['avg'] = combined.mean(axis=1)
+
+# combined = combined['2009':]
+
+combined
+
 if __name__ == '__main__':
 
     data = np.cumprod(1 + combined)

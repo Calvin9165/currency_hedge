@@ -109,7 +109,7 @@ def create_index(start, end, index_ticker):
 
 
 # Function Inputs
-start = '1999-01-01'
+start = '1990-01-01'
 end = '2020-12-31'
 lookback_period = None
 
@@ -120,6 +120,8 @@ securities_df = create_stock_dataframe(watchlist=watchlist_name,
                                        end_date=end,
                                        lookback_period=lookback_period,
                                        frequency='D')
+
+securities_df.dropna(axis=0, inplace=True)
 
 # creating a daily pct_change version of the securities_df
 securities_pct = securities_df.pct_change()
@@ -135,10 +137,11 @@ securities_df.drop({'Date'}, axis=1, inplace=True)
 securities_pct.drop({'Date'}, axis=1, inplace=True)
 securities_pct.fillna(0, inplace=True)
 
+neg_beta_currencies = securities_df.copy()
 neg_beta_currencies_pct = securities_pct.copy()
 
 if __name__ == '__main__':
 
-    data = np.cumprod(1 + neg_beta_currencies)
+    data = np.cumprod(1 + neg_beta_currencies_pct)
     data.plot()
     plt.show()
