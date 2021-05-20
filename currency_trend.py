@@ -40,18 +40,22 @@ positions.fillna(0, inplace=True)
 positions['risk_on'] = 0
 
 for date in risk_on:
-
-    try:
+    if date in positions.index:
         positions['risk_on'].loc[date] = 1
-    except KeyError:
-        continue
-
-# try:
-#     positions['risk_on'].loc[risk_on] = 1
-# except KeyError:
-#     pass
 
 neg_beta_currencies_pct = neg_beta_currencies_pct[positions.index[0]:]
+
+# if market is risk off and currency is trending double the position size
+for security in positions.columns:
+
+    if security == 'risk_on':
+        pass
+    else:
+        # if trend is up and stock market is risk off go 3-1 leverage
+        positions.loc[(positions[security] == 1) & (positions['risk_on'] == 0), security] = 3
+        # if trend is up and stock market is risk on go 1.5 - 1 leverage
+        positions.loc[(positions[security] == 1) & (positions['risk_on'] == 1), security] = 1.5
+
 
 trading = positions * neg_beta_currencies_pct
 
