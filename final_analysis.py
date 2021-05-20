@@ -24,8 +24,10 @@ bonds = '&ZN'
 # combined.loc[(combined['risk_on']) == 0, stocks] *= 0.25
 
 combined.drop('risk_on', axis=1, inplace=True)
-combined[stocks] *= 6
-combined[bonds] *= 10
+combined.drop('USDRUB', axis=1, inplace=True)
+
+combined[stocks] *= 3
+combined[bonds] *= 5
 
 combined['avg'] = combined.mean(axis=1)
 
@@ -35,8 +37,8 @@ data = np.cumprod(1 + combined)
 fig = plt.figure()
 ax1 = fig.add_subplot(111)
 
-ax1.plot(data)
-# ax1.set_yscale('log')
+ax1.plot(data[['USDZAR', 'USDMXN', 'avg']])
+ax1.set_yscale('log')
 plt.show()
 
 # for security in combined.columns:

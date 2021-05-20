@@ -66,7 +66,7 @@ for date in risk_on:
 
 currency_trading.fillna(0, inplace=True)
 
-start = '2005'
+start = '1998'
 
 currency_trading = currency_trading[start:]
 neg_beta_currencies_pct = neg_beta_currencies_pct[start:]
