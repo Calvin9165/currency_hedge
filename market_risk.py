@@ -21,8 +21,8 @@ stocks_bonds.dropna(axis=0, inplace=True)
 
 risk_on = stocks_bonds.loc[stocks_bonds['position'] == 1].index
 
-# dates where we want the portfolio to be "risk on"
-print(risk_on)
+# # dates where we want the portfolio to be "risk on"
+# print(risk_on)
 
 
 # stocks_bonds['test'] = 0

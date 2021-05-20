@@ -5,6 +5,7 @@ import norgatedata
 from datetime import datetime
 
 from load_currency_data import neg_beta_currencies, neg_beta_currencies_pct
+from market_risk import risk_on
 
 lookback = 200
 
@@ -35,6 +36,20 @@ for security in securities:
 # setting the value of short/no position to 0
 positions.fillna(0, inplace=True)
 
+# adding the "risk on" metric which states whether stocks are above/below a moving average
+positions['risk_on'] = 0
+
+for date in risk_on:
+
+    try:
+        positions['risk_on'].loc[date] = 1
+    except KeyError:
+        continue
+
+# try:
+#     positions['risk_on'].loc[risk_on] = 1
+# except KeyError:
+#     pass
 
 neg_beta_currencies_pct = neg_beta_currencies_pct[positions.index[0]:]
 
@@ -45,9 +60,10 @@ start = '2005'
 trading = trading[start:]
 neg_beta_currencies_pct = neg_beta_currencies_pct[start:]
 
-
 data = np.cumprod(1 + neg_beta_currencies_pct)
 trend_data = np.cumprod(1 + trading)
+
+
 
 if __name__ == '__main__':
     fig = plt.figure()
