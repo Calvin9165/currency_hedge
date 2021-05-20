@@ -7,7 +7,7 @@ from datetime import datetime
 from load_currency_data import neg_beta_currencies, neg_beta_currencies_pct
 from market_risk import risk_on
 
-lookback = 200
+lookback = 100
 
 # neg_beta_currencies = neg_beta_currencies['2019':]
 neg_beta_currencies_ma = neg_beta_currencies.rolling(lookback).mean()
@@ -56,17 +56,23 @@ for security in positions.columns:
         # if trend is up and stock market is risk on go 1.5 - 1 leverage
         positions.loc[(positions[security] == 1) & (positions['risk_on'] == 1), security] = 1.5
 
+# this makes the risk on column all nan
+currency_trading = positions * neg_beta_currencies_pct
 
-trading = positions * neg_beta_currencies_pct
+# reintroduce risk on value, not proper way to do it but works for quick n dirty
+for date in risk_on:
+    if date in currency_trading.index:
+        currency_trading['risk_on'].loc[date] = 1
+
+currency_trading.fillna(0, inplace=True)
 
 start = '2005'
 
-trading = trading[start:]
+currency_trading = currency_trading[start:]
 neg_beta_currencies_pct = neg_beta_currencies_pct[start:]
 
 data = np.cumprod(1 + neg_beta_currencies_pct)
-trend_data = np.cumprod(1 + trading)
-
+trend_data = np.cumprod(1 + currency_trading)
 
 
 if __name__ == '__main__':
