@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import norgatedata
 from datetime import datetime
 
-from load_currency_data import neg_beta_currencies
+from load_currency_data import neg_beta_currencies, neg_beta_currencies_pct
 
-lookback = 50
+lookback = 200
 
 # neg_beta_currencies = neg_beta_currencies['2019':]
 neg_beta_currencies_ma = neg_beta_currencies.rolling(lookback).mean()
@@ -36,6 +36,28 @@ for security in securities:
 positions.fillna(0, inplace=True)
 
 
+neg_beta_currencies_pct = neg_beta_currencies_pct[positions.index[0]:]
+
+trading = positions * neg_beta_currencies_pct
+
+start = '2005'
+
+trading = trading[start:]
+neg_beta_currencies_pct = neg_beta_currencies_pct[start:]
+
+
+data = np.cumprod(1 + neg_beta_currencies_pct)
+trend_data = np.cumprod(1 + trading)
+
+if __name__ == '__main__':
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+
+    ax1.plot(data, label='data')
+    ax1.plot(trend_data, label='trend_data')
+    ax1.set_yscale('log')
+    plt.legend()
+    plt.show()
 
 
 
